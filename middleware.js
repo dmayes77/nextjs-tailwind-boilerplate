@@ -13,7 +13,7 @@ export function middleware(request) {
   const url = request.nextUrl.clone();
 
   if (url.pathname === '/') {
-    url.pathname = isMobile ? '/mobile' : '/desktop';
+    url.pathname = isMobile ? '/uix/mobile' : '/uix/desktop';
     console.log(`Rewriting from "/" to "${url.pathname}"`);
     return NextResponse.rewrite(url);
   }
