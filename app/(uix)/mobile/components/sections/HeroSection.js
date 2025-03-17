@@ -14,7 +14,7 @@ export default function HeroSection({ content = { title: "", subtitle: "" }, ima
         {/* Hero Content */}
         <div className="relative z-10 flex flex-col items-center justify-center text-center h-full px-2 !space-y-2">
           <MobileHeader />
-          <h1 className="text-mad-white drop-shadow-lg uppercase">{content.title}</h1>
+          <h1 className="h2 text-mad-white drop-shadow-lg uppercase">{content.title}</h1>
           {content.subtitle && <p className="text-mad-white">{content.subtitle}</p>}
           {content.description && <p className="text-mad-white mx-auto">{content.description}</p>}
         </div>

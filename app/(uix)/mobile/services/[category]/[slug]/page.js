@@ -5,6 +5,7 @@ import services from "@/lib/services";
 import HeroSection from "@/(uix)/mobile/components/sections/HeroSection";
 import SectionWrapper from "@/components/global/SectionWrapper";
 import VehicleClassifierPopup from "@/components/vehicle-classifier/VehicleClassifierPopup";
+import CustomButton from "@/components/global/CustomButton";
 
 // Generate metadata dynamically using the dynamic route parameters.
 export async function generateMetadata({ params }) {
@@ -46,6 +47,15 @@ export default async function ServiceDetailPage({ params }) {
 
       {/* Main Content */}
       <SectionWrapper id="main" className="flex flex-col p-4 pb-12 space-y-6 bg-mad-blue/10">
+        {/* Back Button */}
+        <CustomButton
+          href={`/mobile/services/${category}`}
+          className="w-full"
+          iconName="MdArrowBackIos"
+          iconSet="mdi"
+        >
+          Back to Services
+        </CustomButton>
         {/* Service Overview */}
         <div className="bg-white rounded-lg shadow p-4">
           <h2 className="text-xl font-semibold mb-4">Service Overview</h2>
@@ -116,6 +126,7 @@ export default async function ServiceDetailPage({ params }) {
           </ul>
         </div>
         <VehicleClassifierPopup buttonTitle="Find My Vehicle Size" />
+      <CustomButton href="/mobile/booking" className="w-full shine">Book Now</CustomButton>
       </SectionWrapper>
     </>
   );

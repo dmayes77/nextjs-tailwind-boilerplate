@@ -9,7 +9,7 @@ export default function CustomLink({ href, children, title, onClick, ...props}) 
     if (href === "#") {
       e.preventDefault();
     }
-    console.log(`Clicked: ${title}`);
+    console.log(`Clicked: ${title} ${href}`);
     if (onClick) {
       onClick();
     }

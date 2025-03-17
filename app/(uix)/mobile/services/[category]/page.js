@@ -1,18 +1,21 @@
-// src/app/(uix)/mobile/services/[category]/page.js
+// src/app/uix/mobile/services/[category]/page.js
 import { createMetadata } from "@/lib/metadata";
 import React from "react";
 import HeroSection from "../../components/sections/HeroSection";
 import ServiceCard from "@/(uix)/mobile/components/ui/ServiceCard";
 import services from "@/lib/services";
-import { heroImages } from "@/lib/images";
+import serviceCategories from "@/lib/serviceCategories";
 import SectionWrapper from "@/components/global/SectionWrapper";
 import CustomLink from "@/components/global/CustomLink";
+import { heroImages } from "@/lib/images";
+import CustomButton from "@/components/global/CustomButton";
 
-// Generate metadata based on the category parameter
+// Helper to normalize strings
+const normalize = (str) => str.toLowerCase().replace(/-/g, "");
+
 export async function generateMetadata({ params }) {
-  const resolvedParams = await Promise.resolve(params);
-  const { category } = await resolvedParams;
-
+  const { category } = await Promise.resolve(params);
+  // Optionally normalize the category if needed
   return createMetadata({
     title: `Mayes Auto Detailing | ${category.charAt(0).toUpperCase() + category.slice(1)} Services`,
     description: `Explore our expert ${category} services in Chattanooga, TN.`,
@@ -20,28 +23,43 @@ export async function generateMetadata({ params }) {
   });
 }
 
-// Accept params as a prop instead of using useParams()
 export default async function ServiceCategoryPage({ params }) {
-  const resolvedParams = await Promise.resolve(params);
-  const { category } =  resolvedParams;
+  const { category } = await Promise.resolve(params);
+  
+  // Look up the category object by id (normalize if necessary)
+  const categoryObj = serviceCategories.find((cat) => normalize(cat.slug) === normalize(category));
+  
 
-  // Filter services based on the category
-  const filteredServices = services.filter((service) => service.category === category);
+  // Filter services based on the category string
+  const filteredServices = services.filter((service) => normalize(service.category) === normalize(category));
+  
 
   return (
     <>
       <HeroSection
         content={{
-          title: `${category.charAt(0).toUpperCase() + category.slice(1)} Services`,
-          subtitle: `Expert ${category} solutions`,
-          description: `Discover our range of ${category} services in Chattanooga, TN.`,
+          title: categoryObj
+            ? `${categoryObj.title} Services`
+            : `${category.charAt(0).toUpperCase() + category.slice(1)} Services`,
+          subtitle: categoryObj
+            ? `Expert ${categoryObj.title} solutions`
+            : `Expert ${category} solutions`,
+          description: categoryObj
+            ? `Discover our range of ${categoryObj.title.toLowerCase()} services in Chattanooga, TN.`
+            : `Discover our range of ${category} services in Chattanooga, TN.`,
         }}
-        imageSrc={heroImages.allServices.src}
+        imageSrc={categoryObj && categoryObj.imageSrc ? categoryObj.imageSrc : heroImages.allServices.src}
       />
       <SectionWrapper id="main" className="flex flex-col p-4 pb-12 space-y-4">
+        <CustomButton
+                  href="/mobile/services"
+          className="w-full"
+          iconName="MdArrowBackIos"
+          iconSet="mdi"
+                >Back to Categories</CustomButton>
         {filteredServices.length > 0 ? (
           filteredServices.map((service, i) => (
-            <CustomLink key={i} href={`/mobile/services/${category}/${service.slug}`} title={`/mobile/services/${category}/${service.slug}`}>
+            <CustomLink key={i} href={`/mobile/services/${category}/${service.slug}`} title={service.title}>
               <ServiceCard
                 imageSrc={service.imageSrc}
                 imageAlt={service.imageAlt}
